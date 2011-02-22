@@ -18,7 +18,7 @@ class DemoStage < PhysicalStage
     ]
 
     @active_hexes.each_with_index do |hex,index|
-      hex.player_attractor = hex.pivot(vec2(0,0), @player, vec2(0,0))[0]
+      hex.player_attractor = hex.pivot(vec2(0,0), @player, vec2(0,0))
       hex.player_attractor.max_force = 200.0
       p hex.player_attractor
     end
@@ -66,7 +66,7 @@ class DemoStage < PhysicalStage
     if @spawn_counter >= SPAWN_THRESHOLD
       @spawn_counter = 0
       new_hex = spawn(:hexagon, :x => 100, :y => 100)
-      new_hex.player_attractor = new_hex.pivot(vec2(0,0), @player, vec2(0,0))[0]
+      new_hex.player_attractor = new_hex.pivot(vec2(0,0), @player, vec2(0,0))
       new_hex.player_attractor.max_force = 200.0
       @active_hexes << new_hex
     end
@@ -175,11 +175,12 @@ class DemoStage < PhysicalStage
         p[:v2].x.to_i != vertex_pairs.first[:v2].x.to_i &&
         p[:v2].y.to_i != vertex_pairs.first[:v2].y.to_i)
 
-        distance = Math.sqrt( (p[:v1].x - vertex_pairs.first[:v1].x)**2 + (p[:v2].y - vertex_pairs.first[:v2].y)**2)
-        # 26 to account for floating point errors and such... close enough
-        if (distance <= 26)
+        distance_v1 = Math.sqrt( (p[:v1].x - vertex_pairs.first[:v1].x)**2 + (p[:v1].y - vertex_pairs.first[:v1].y)**2)
+        distance_v2 = Math.sqrt( (p[:v2].x - vertex_pairs.first[:v2].x)**2 + (p[:v2].y - vertex_pairs.first[:v2].y)**2)
+        if (distance_v1 < 25.1 && distance_v2 < 25.1)
           puts "Second closest:"
           p p
+          puts "Distance to closest: #{distance_v1}, #{distance_v2}"
           closest << [ hex1.physical.body.world2local(p[:v1]), hex2.physical.body.world2local(p[:v2]) ]
           break
         end

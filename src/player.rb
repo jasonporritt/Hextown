@@ -1,9 +1,9 @@
-class PlayerView < HexagonView
-end
+#class PlayerView < HexagonView
+#end
 
 class Player < Hexagon
 
-  has_behaviors :updatable, :physical => {
+  has_behaviors :graphical, :updatable, :physical => {
     :shape => :poly,
     :verts => Hexagon::get_verts(),
     :mass => 1000,
